@@ -2,9 +2,10 @@
   "posts": [
     {
       "id": "1",
-      "title": "11",
-      "body": "11",
-      "createdAt": 1715506949403
+      "title": "reacttesdd",
+      "body": "reacttesdd",
+      "createdAt": 1715506949403,
+      "publish": true
     },
     {
       "id": "2",
@@ -23,6 +24,20 @@
       "title": "44",
       "body": "44",
       "createdAt": 1715507077695
+    },
+    {
+      "id": "dc2c",
+      "title": "test",
+      "body": "test",
+      "publish": true,
+      "createdAt": 1715512937959
+    },
+    {
+      "id": "1166",
+      "title": "test",
+      "body": "test",
+      "publish": false,
+      "createdAt": 1715512946791
     }
   ]
 }
