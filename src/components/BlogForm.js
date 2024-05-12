@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const BlogForm = () => {
+  const history = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
   const onSubmit = async () => {
-    try {
-      const response = await axios.post('http://localhost:3009/posts', {
+    await axios
+      .post('http://localhost:3009/posts', {
         title: title,
-        body: body, // 오타 수정
+        body: body,
+      })
+      .then(() => {
+        history('/blogs'); // 페이지 리디렉션
+      })
+      .catch((error) => {
+        console.error('Failed to post data:', error); // 오류 처리 추가
       });
-      console.log('Post Created:', response.data);
-      // 성공 후 추가 동작 (예: 폼 초기화)
-    } catch (error) {
-      console.error('Error posting data:', error);
-      // 실패 처리 로직
-    }
   };
 
   return (
