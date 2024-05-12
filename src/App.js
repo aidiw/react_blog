@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-
 import NavBar from './components/NavBar';
 import routes from './routes';
 
@@ -9,17 +8,22 @@ function App() {
     <Router>
       <div>
         <NavBar />
-        <div className="container">
+        <div className="container mt-3">
           <Routes>
-              {routes.map((route) => {
-                return <Route key={route.path} path={route.path} Component={route.component} />;
-              })}
+            {routes.map((route) => {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  Component={route.component}
+                />
+              );
+            })}
           </Routes>
         </div>
       </div>
     </Router>
   );
-  
 }
 
 export default App;
