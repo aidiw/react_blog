@@ -22,7 +22,7 @@ const routes = [
     component: ShowPage,
   },
   {
-    path: '/blogs/edit',
+    path: '/blogs/:id/edit',
     component: EditPage,
   },
 ];

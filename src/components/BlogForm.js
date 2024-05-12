@@ -1,17 +1,27 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { bool } from 'prop-types';
 
-const BlogForm = () => {
+const BlogForm = ( {editing}) => {
   const history = useNavigate();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const {id} = useParams();
+
+  useEffect(() => {
+    axios.get(`http://localhost:3009/posts/${id}`).then(res => {
+        setTitle(res.data.title);
+        setBody(res.data.body);
+    })
+  }, [id])
 
   const onSubmit = async () => {
     await axios
       .post('http://localhost:3009/posts', {
         title: title,
         body: body,
+        createdAt: Date.now()
       })
       .then(() => {
         history('/blogs'); // 페이지 리디렉션
@@ -23,7 +33,7 @@ const BlogForm = () => {
 
   return (
     <div>
-      <h1>CREATE A BLOG POST</h1>
+      <h1>{editing? 'Eidt' : 'Create'} a blog</h1>
       <div className="mb-3">
         <label className="form-label">Title</label>
         <input
@@ -38,14 +48,23 @@ const BlogForm = () => {
           className="form-control"
           value={body}
           onChange={(event) => setBody(event.target.value)}
-          rows={20}
+          rows={10}
         />
       </div>
       <button className="btn btn-primary" onClick={onSubmit}>
-        Post
+        {editing? 'Edit' : 'Post'}
       </button>
     </div>
   );
 };
+
+BlogForm.propTypes = {
+    editing: bool
+}
+
+BlogForm.defaultProps = {
+    editing: false
+}
+
 
 export default BlogForm;
