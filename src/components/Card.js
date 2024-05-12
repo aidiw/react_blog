@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-const Card = ({ title, onClick,children }) => { // title을 props에서 직접 추출
+const Card = ({ title = '', onClick = () => {}, children = null }) => {// title을 props에서 직접 추출
     return (
       <div 
         className="card mb-3 cusor-pointer"
@@ -21,14 +21,6 @@ const Card = ({ title, onClick,children }) => { // title을 props에서 직접 �
     children: PropTypes.element,
     onClick: PropTypes.func
   }
-
-  Card.defaultProps = {
-    children: null,
-    onClick: () => {},
-  }
-
-  
-
 
 
 export default Card;
