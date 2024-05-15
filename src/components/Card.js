@@ -4,11 +4,9 @@ const Card = ({ title = '', onClick = () => {}, children = null }) => {
   // title을 props에서 직접 추출
   return (
     <div className="card mb-3 cusor-pointer" onClick={onClick}>
-      <div className="card-body">
-        <div className="d-flex justify-content-between">
-          <div>{title}</div>
+      <div className="card-body py-2 d-flex align-items-center">
+          <div className="flex-grow-1">{title}</div>
           {children && <div>{children}</div>}
-        </div>
       </div>
     </div>
   );

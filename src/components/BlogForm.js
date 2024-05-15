@@ -59,7 +59,7 @@ const BlogForm = ( {editing = false}) => {
             createdAt: Date.now()
         })
         .then(() => {
-            history('/blogs'); // 페이지 리디렉션
+            history('/admin'); // 페이지 리디렉션
         })
         .catch((error) => {
             console.error('Failed to post data:', error); // 오류 처리 추가
