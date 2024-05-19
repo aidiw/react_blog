@@ -1,8 +1,6 @@
-
 import BlogList from '../components/BlogList';
 
 const ListPage = () => {
- 
   return (
     <div>
       <div className="d-flex justify-content-between align-content-center">

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { bool } from 'prop-types';
+// import { bool } from 'prop-types';
+import propTypes from 'prop-types';
 
 const BlogForm = ( {editing = false}) => {
   const history = useNavigate();
@@ -81,6 +82,9 @@ const BlogForm = ( {editing = false}) => {
           value={title}
           onChange={(event) => setTitle(event.target.value)}
         />
+        <div>
+          Title is required.
+        </div>
       </div>
       <div className="mb-3">
         <label className="form-label">Body</label>
@@ -121,7 +125,7 @@ const BlogForm = ( {editing = false}) => {
 };
 
 BlogForm.propTypes = {
-    editing: bool
+    editing: propTypes.bool
 }
 
 

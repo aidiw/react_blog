@@ -6,7 +6,6 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import { bool } from 'prop-types';
 import Pagination from './Pagination';
 
-
 const BlogList = ({ isAdmin }) => {
     const history = useNavigate();
     const location = useLocation();
@@ -16,27 +15,29 @@ const BlogList = ({ isAdmin }) => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
-    const [numberOfPosts, setNumberOfPoasts] = useState(0);
+    const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
+    const [searchText, setSearchText] = useState('');
     const limit = 5;
 
-    useEffect(()=> {
-        setNumberOfPages(Math.ceil(numberOfPosts/limit));
+    useEffect(() => {
+        setNumberOfPages(Math.ceil(numberOfPosts / limit));
     }, [numberOfPosts]);
 
-  
-
-
     const onClickPageButton = (page) => {
-        history(`${location.pathname}?page=${page}`)
+        history(`${location.pathname}?page=${page}`);
+        setCurrentPage(page);
+        getPosts(page);
     }
+
     const getPosts = useCallback((page = 1) => {
         setCurrentPage(page);
         let params = {
-            _page: page, 
+            _page: page,
             _limit: limit,
             _sort: 'id',
-            _order: 'desc'
+            _order: 'desc',
+            title_like: searchText
         };
 
         if (!isAdmin) {
@@ -45,16 +46,19 @@ const BlogList = ({ isAdmin }) => {
 
         axios.get(`http://localhost:3009/posts`, { params })
             .then((res) => {
-                setNumberOfPoasts(res.headers['x-total-count']);
+                setNumberOfPosts(parseInt(res.headers['x-total-count'], 10));
                 setPosts(res.data);
                 setLoading(false);
             });
-    }, [isAdmin]);
+    }, [isAdmin, searchText]);
 
-    useEffect(()=> {
-        setCurrentPage(parseInt(pageParam) || 1);
+   
+
+    useEffect(() => {
+        setCurrentPage(parseInt(pageParam) || 1);   
         getPosts(parseInt(pageParam) || 1);
-    }, [pageParam, getPosts]);
+
+    }, []);
 
     const deleteBlog = (e, id) => {
         e.stopPropagation();
@@ -67,9 +71,6 @@ const BlogList = ({ isAdmin }) => {
         return <LoadingSpinner />;
     }
 
-    if (posts.length === 0) {
-        return <div>No blog posts found</div>;
-    }
 
     const renderBlogList = () => {
         return posts.map((post) => (
@@ -92,15 +93,37 @@ const BlogList = ({ isAdmin }) => {
         ));
     };
 
+    const onSearch = (e) => {
+        if (e.key === 'Enter') {
+            history(`${location.pathname}?page=1`)
+            setCurrentPage(1);
+            getPosts(1);
+        }
+    }
+
     return (
         <div>
-            {renderBlogList()}
-            {numberOfPages > 1 && <Pagination 
-                currentPage={currentPage} 
-                numberOfPages={numberOfPages}
-                onClick={onClickPageButton}
-                limit = {limit}
-            />}
+            <input 
+                type="text"
+                placeholder=''
+                className="form-control"
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                onKeyUp={onSearch}
+            />
+            <hr />
+            {posts.length === 0 
+                ? <div>No blog posts found</div>
+                : <>{renderBlogList()}
+                {numberOfPages > 1 && <Pagination
+                    currentPage={currentPage}
+                    numberOfPages={numberOfPages}
+                    onClick={onClickPageButton}
+                    limit={limit}
+                />}
+            
+            </>}
+            
         </div>
     );
 };
