@@ -1,18 +1,19 @@
 
-import {useState, useRef} from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
+import { addToast as add, removeToast } from '../store/toastSlice';
+import { useDispatch } from 'react-redux';
 const useToast = () => {
-    const [, setToastRerender] = useState(false);
-    const toasts = useRef([]); //리렌더링이 일어나지않음. 업데이트를하면 그 즉시 업데이트하게되어있음.
+    const dispatch  = useDispatch();
 
     const deleteToast = (id) => {
-    const filteredToasts = toasts.current.filter(toast => {
-        return toast.id !== id
-        });
+        // const filteredToasts = toasts.current.filter(toast => {
+        //     return toast.id !== id
+        // });
     
-        toasts.current = filteredToasts;
-        setToastRerender(prev => !prev);
+        // toasts.current = filteredToasts;
+        // setToastRerender(prev => !prev);
+
+        removeToast(removeToast(id));
     };
     
     const addToast = (toast) => {
@@ -21,18 +22,22 @@ const useToast = () => {
             ...toast,
             id
         };
-        toasts.current = [...toasts.current, toastWithId];
-        setToastRerender(prev => !prev);
+        dispatch(add(toastWithId)); // action addToast의 payload에 담김
+
+        // toasts.current = [...toasts.current, toastWithId];
+        // setToastRerender(prev => !prev);
+
+
         setTimeout(() => {
-            deleteToast(id, toasts, setToastRerender);
+            deleteToast(id);
         }, 5000);
     };
 
-    return [
-        toasts.current,
+    return {
         addToast,
         deleteToast
-    ]
+    }
+    
 };
 
 export default useToast;

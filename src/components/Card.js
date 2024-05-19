@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 const Card = ({ title = '', onClick = () => {}, children = null }) => {
   // title을 props에서 직접 추출

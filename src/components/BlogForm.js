@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 const BlogForm = ({ editing = false, addToast }) => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [originalTitle, setOriginalTitle] = useState('');
@@ -38,9 +38,9 @@ const BlogForm = ({ editing = false, addToast }) => {
 
   const goBack = () => {
     if (editing) {
-      history(`/blogs/${id}`);
+      navigate(`/blogs/${id}`);
     } else {
-      history('/blogs');
+      navigate('/blogs');
     }
   }
 
@@ -71,7 +71,7 @@ const BlogForm = ({ editing = false, addToast }) => {
           body: body,
           publish
         }).then(res => {
-          history(`/blogs/${id}`);
+          navigate(`/blogs/${id}`);
         });
       } else { //생성시
         await axios.post('http://localhost:3009/posts', {
@@ -85,7 +85,7 @@ const BlogForm = ({ editing = false, addToast }) => {
             type : 'success',
             text: 'successfully created!'
           })
-          // history('/admin'); // 페이지 리디렉션
+          // navigate('/admin'); // 페이지 리디렉션
         })
         .catch((error) => {
           console.error('Failed to post data:', error); // 오류 처리 추가

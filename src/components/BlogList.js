@@ -5,12 +5,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { bool } from 'prop-types';
 import Pagination from './Pagination';
-import Toast from './Toasts';
 import useToast from '../hooks/toasts';
 
 // BlogList 컴포넌트 정의
 const BlogList = ({ isAdmin }) => {
-    const history = useNavigate();
+    const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const pageParam = params.get('page'); // 현재 페이지 파라미터를 가져옴
@@ -21,8 +20,7 @@ const BlogList = ({ isAdmin }) => {
     const [numberOfPosts, setNumberOfPosts] = useState(0);
     const [numberOfPages, setNumberOfPages] = useState(0);
     const [searchText, setSearchText] = useState('');
-
-    const [toasts, addToast, deleteToast] = useToast();
+    const { addToast } = useToast();
     const limit = 5; // 한 페이지에 보여줄 게시물 수
 
     // 게시물 수에 따라 총 페이지 수를 계산
@@ -32,7 +30,7 @@ const BlogList = ({ isAdmin }) => {
 
     // 페이지 버튼 클릭 시 호출되는 함수
     const onClickPageButton = (page) => {
-        history(`${location.pathname}?page=${page}`);
+        navigate(`${location.pathname}?page=${page}`);
         setCurrentPage(page);
         getPosts(page);
     };
@@ -89,7 +87,7 @@ const BlogList = ({ isAdmin }) => {
             <Card
                 key={post.id}
                 title={post.title}
-                onClick={() => history(`/blogs/${post.id}`)}
+                onClick={() => navigate(`/blogs/${post.id}`)}
             >
                 {isAdmin ? (
                     <div>
@@ -108,7 +106,7 @@ const BlogList = ({ isAdmin }) => {
     // 검색 입력 필드에서 Enter 키를 눌렀을 때 호출되는 함수
     const onSearch = (e) => {
         if (e.key === 'Enter') {
-            history(`${location.pathname}?page=1`);
+            navigate(`${location.pathname}?page=1`);
             setCurrentPage(1);
             getPosts(1);
         }
@@ -116,10 +114,6 @@ const BlogList = ({ isAdmin }) => {
 
     return (
         <div>
-            <Toast 
-                toasts={toasts}
-                deleteToast={deleteToast}
-            />
             <input 
                 type="text"
                 placeholder='search..'
